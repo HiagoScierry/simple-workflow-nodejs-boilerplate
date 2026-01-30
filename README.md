@@ -50,6 +50,49 @@ jobs:
 README.md
 ```
 
+## Publicação de imagem Docker (docker-publish)
+
+Este repositório possui um workflow reutilizável para build e publicação de imagens Docker no Docker Hub, já padronizando o nome da imagem para o seu namespace.
+
+### Como usar
+
+No seu projeto, crie um workflow que chame o workflow `docker-publish.yml` deste repositório:
+
+```yaml
+name: Docker Publish
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    uses: usuario/simple-workflow-nodejs-boilerplate/.github/workflows/docker-publish.yml@main
+    with:
+      image-name: QualquerNomeOuTagAqui  # Exemplo: HiagoScierry/boilerplate-simple-project-nodejs:latest
+    secrets:
+      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+```
+
+### Como funciona o nome da imagem
+
+- O workflow ignora o usuário/tag do parâmetro `image-name` e sempre publica como:
+  
+  `docker.io/hiagoscierry/<nome-do-projeto>:latest`
+  
+- O nome do projeto é extraído automaticamente do parâmetro, convertido para minúsculas.
+- O push é feito para o Docker Hub no namespace `hiagoscierry`.
+
+**Exemplo:**
+
+Se você passar `HiagoScierry/boilerplate-simple-project-nodejs:latest` ou apenas `boilerplate-simple-project-nodejs`, a imagem publicada será:
+
+```
+docker.io/hiagoscierry/boilerplate-simple-project-nodejs:latest
+```
+
+Assim, você não precisa se preocupar com o formato do parâmetro `image-name`.
+
 ## Contribuindo
 
 Sinta-se à vontade para abrir issues ou pull requests para sugerir melhorias ou reportar problemas.

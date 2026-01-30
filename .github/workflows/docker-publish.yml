@@ -57,4 +57,4 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.image_path }}:latest
-            ${{ steps.meta.outputs.image_path }}:${{ github.sha }}
+            ${{ steps.meta.outputs.image_path }}:${{ inputs.image-name }}
