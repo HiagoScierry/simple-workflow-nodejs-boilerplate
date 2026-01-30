@@ -8,11 +8,11 @@ inputs:
   run-lint:
     description: 'Rodar lint (ESLint)'
     required: false
-    default: true
+    default: 'true'
   run-test:
     description: 'Rodar testes'
     required: false
-    default: true
+    default: 'true'
 runs:
   using: 'composite'
   steps:
