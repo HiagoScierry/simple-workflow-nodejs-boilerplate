@@ -40,5 +40,6 @@ jobs:
         if: ${{ inputs.run_test }}
         run: npm test
 
-      - name: Build project
+      - name: Build do projeto
+        if: ${{ inputs.run_build }}
         run: npm run build
