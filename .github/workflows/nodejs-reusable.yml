@@ -1,13 +1,19 @@
-name: CI/CD Node.js
+name: Node.js Reusable Workflow
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_call:
+    inputs:
+      run_lint:
+        required: false
+        type: boolean
+        default: true
+      run_test:
+        required: false
+        type: boolean
+        default: true
 
 jobs:
-  build-and-test:
+  quality-checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
@@ -23,7 +29,9 @@ jobs:
         run: npm ci
 
       - name: Rodar ESLint
+        if: ${{ inputs.run_lint }}
         run: npx eslint .
 
       - name: Rodar testes
+        if: ${{ inputs.run_test }}
         run: npm test
