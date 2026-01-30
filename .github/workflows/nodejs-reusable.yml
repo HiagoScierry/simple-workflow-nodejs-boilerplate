@@ -43,7 +43,3 @@ jobs:
       - name: Rodar testes
         if: ${{ inputs.run_test }}
         run: npm test
-
-      - name: Build do projeto
-        if: ${{ inputs.run_build }}
-        run: npm run build
