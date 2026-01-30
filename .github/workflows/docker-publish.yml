@@ -45,7 +45,6 @@ jobs:
         with:
           context: ${{ inputs.build-context }}
           push: true
-          # Forçamos o prefixo docker.io para evitar que o Docker tente resolver o seu username como um domínio
           tags: |
-            docker.io/${{ secrets.dockerhub-username }}/${{ inputs.image-name }}:latest
-            docker.io/${{ secrets.dockerhub-username }}/${{ inputs.image-name }}:${{ github.sha }}
+            docker.io/${{ inputs.image-name }}
+            docker.io/${{ github.repository }}:${{ github.sha }}
