@@ -25,7 +25,6 @@ jobs:
       run_test: true
       run_build: true
 
-
   publish-docker:
     runs-on: ubuntu-latest
     needs: build-and-test
