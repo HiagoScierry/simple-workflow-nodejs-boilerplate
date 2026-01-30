@@ -36,7 +36,12 @@ jobs:
           # 1. Pegamos apenas o nome do projeto (ex: boilerplate-simple-project-nodejs)
           # Removemos o usuário se ele vier no input e removemos tags
           RAW_NAME="${{ inputs.image-name }}"
-          CLEAN_PROJECT_NAME=$(echo "${RAW_NAME##*/}" | cut -d':' -f1 | tr '[:upper:]' '[:lower:]')
+          # Se tiver barra, pega só o nome após a barra, senão usa o nome inteiro
+          if [[ "$RAW_NAME" == *"/"* ]]; then
+            CLEAN_PROJECT_NAME=$(echo "${RAW_NAME##*/}" | cut -d':' -f1 | tr '[:upper:]' '[:lower:]')
+          else
+            CLEAN_PROJECT_NAME=$(echo "$RAW_NAME" | cut -d':' -f1 | tr '[:upper:]' '[:lower:]')
+          fi
 
           # 2. Definimos o usuário fixo como 'hiagoscierry' que é o seu namespace real
           echo "image_path=docker.io/hiagoscierry/$CLEAN_PROJECT_NAME" >> $GITHUB_OUTPUT
