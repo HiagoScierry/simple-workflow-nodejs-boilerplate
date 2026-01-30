@@ -33,14 +33,13 @@ jobs:
       - name: Prepare Docker Metadata
         id: meta
         run: |
-          # 1. Pegamos o input e removemos qualquer tag existente (ex: remove :latest se houver)
-          CLEAN_NAME=$(echo "${{ inputs.image-name }}" | cut -d':' -f1)
+          # 1. Pegamos apenas o nome do projeto (ex: boilerplate-simple-project-nodejs)
+          # Removemos o usuário se ele vier no input e removemos tags
+          RAW_NAME="${{ inputs.image-name }}"
+          CLEAN_PROJECT_NAME=$(echo "${RAW_NAME##*/}" | cut -d':' -f1 | tr '[:upper:]' '[:lower:]')
 
-          # 2. Garantimos que o nome do usuário e da imagem fiquem em minúsculo
-          # 3. Montamos o caminho completo: docker.io/usuario/projeto
-          FULL_IMAGE_PATH=$(echo "docker.io/${{ secrets.dockerhub-username }}/$CLEAN_NAME" | tr '[:upper:]' '[:lower:]')
-
-          echo "image_path=$FULL_IMAGE_PATH" >> $GITHUB_OUTPUT
+          # 2. Definimos o usuário fixo como 'hiagoscierry' que é o seu namespace real
+          echo "image_path=docker.io/hiagoscierry/$CLEAN_PROJECT_NAME" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -56,7 +55,6 @@ jobs:
         with:
           context: ${{ inputs.build-context }}
           push: true
-          # Agora usamos o caminho limpo e adicionamos as tags manualmente
           tags: |
             ${{ steps.meta.outputs.image_path }}:latest
             ${{ steps.meta.outputs.image_path }}:${{ github.sha }}
