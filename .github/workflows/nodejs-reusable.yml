@@ -11,27 +11,18 @@ on:
         required: false
         type: boolean
         default: true
+      node-version:
+        required: false
+        type: string
+        default: '20'
 
 jobs:
   quality-checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - name: Node.js Build and Test
+        uses: ./.github/actions/node-build-test
         with:
-          node-version: '20.x'
-          cache: 'npm'
-
-      - name: Instalar dependências
-        run: npm ci
-
-      - name: Rodar ESLint
-        if: ${{ inputs.run_lint }}
-        run: npx eslint .
-
-      - name: Rodar testes
-        if: ${{ inputs.run_test }}
-        run: npm test
+          node-version: ${{ inputs.node-version }}
+          run-lint: ${{ inputs.run_lint }}
+          run-test: ${{ inputs.run_test }}
