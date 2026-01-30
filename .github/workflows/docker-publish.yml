@@ -3,12 +3,6 @@ name: Build, Test and Publish Docker Image
 on:
   workflow_call:
     inputs:
-      dockerhub-username:
-        required: true
-        type: string
-      dockerhub-password:
-        required: true
-        type: string
       image-name:
         required: true
         type: string
@@ -16,6 +10,11 @@ on:
         required: false
         type: string
         default: '.'
+    secrets:
+      dockerhub-username:
+        required: true
+      dockerhub-password:
+        required: true
 
 jobs:
   build-and-test:
