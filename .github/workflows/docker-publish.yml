@@ -53,8 +53,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ${{ inputs.build-context }}
+          context: .
           push: true
           tags: |
-            ${{ steps.meta.outputs.image_path }}:latest
-            ${{ steps.meta.outputs.image_path }}:${{ inputs.image-name }}
+            docker.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
+            docker.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:{{ inputs.image-name }}
