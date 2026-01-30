@@ -36,10 +36,17 @@ jobs:
           # 1. Pegamos apenas o nome do projeto (ex: boilerplate-simple-project-nodejs)
           # Removemos qualquer namespace/usuário e tags
           RAW_NAME="${{ inputs.image-name }}"
+          # Extrai nome do projeto (sem usuário, sem tag)
           CLEAN_PROJECT_NAME=$(echo "$RAW_NAME" | awk -F'/' '{print $NF}' | cut -d':' -f1 | tr '[:upper:]' '[:lower:]')
+          # Extrai tag customizada, se houver
+          CUSTOM_TAG=$(echo "$RAW_NAME" | grep -oE ':[^:]+$' | sed 's/^://')
 
-          # 2. Definimos o usuário fixo como 'hiagoscierry' (nunca vazio)
+          # Define o path base da imagem
           echo "image_path=docker.io/hiagoscierry/$CLEAN_PROJECT_NAME" >> $GITHUB_OUTPUT
+          # Exporta a tag customizada, se existir
+          if [ -n "$CUSTOM_TAG" ]; then
+            echo "custom_tag=$CUSTOM_TAG" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -58,3 +65,4 @@ jobs:
           tags: |
             ${{ steps.meta.outputs.image_path }}:latest
             ${{ steps.meta.outputs.image_path }}:${{ github.sha }}
+            ${{ steps.meta.outputs.image_path }}${{ steps.meta.outputs.custom_tag && format(':{0}', steps.meta.outputs.custom_tag) || '' }}
