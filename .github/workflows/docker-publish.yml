@@ -42,7 +42,7 @@ jobs:
           CUSTOM_TAG=$(echo "$RAW_NAME" | grep -oE ':[^:]+$' | sed 's/^://')
 
           # Define o path base da imagem
-          echo "image_path=docker.io/hiagoscierry/$CLEAN_PROJECT_NAME" >> $GITHUB_OUTPUT
+          echo "image_path=docker.io/${{ secrets.dockerhub-username }}/$CLEAN_PROJECT_NAME" >> $GITHUB_OUTPUT
           # Exporta a tag customizada, se existir
           if [ -n "$CUSTOM_TAG" ]; then
             echo "custom_tag=$CUSTOM_TAG" >> $GITHUB_OUTPUT
